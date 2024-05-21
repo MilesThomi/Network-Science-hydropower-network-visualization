@@ -1,0 +1,127 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 1000px;
+                 height: 700px;
+                 background-color: #222222;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#3498db", "font": {"color": "white"}, "id": "Hydrology", "label": "Hydrology", "shape": "dot", "size": 114.0, "title": "Hydrology\nTotal ECTS: 104.0\nConnections: 17"}, {"color": "lightgrey", "font": {"color": "white"}, "id": "Hydrologie I+II", "label": "Hydrologie I+II", "shape": "dot", "size": 21.0, "title": "Hydrologie I+II\nECTS: 3.0\nConnections: 1\nCore Topic: Hydrology"}, {"color": "lightgrey", "font": {"color": "white"}, "id": "Seminar Hydrologie", "label": "Seminar Hydrologie", "shape": "dot", "size": 25.0, "title": "Seminar Hydrologie\nECTS: 5.0\nConnections: 2\nCore Topic: Natural Hazards"}, {"color": "lightgrey", "font": {"color": "white"}, "id": "Grundz\u00fcge Erdwissenschaften I+II", "label": "Grundz\u00fcge Erdwissenschaften I+II", "shape": "dot", "size": 27.0, "title": "Grundz\u00fcge Erdwissenschaften I+II\nECTS: 6.0\nConnections: 2\nCore Topic: Natural Hazards"}, {"color": "lightgrey", "font": {"color": "white"}, "id": "Meteorologie I+II", "label": "Meteorologie I+II", "shape": "dot", "size": 27.0, "title": "Meteorologie I+II\nECTS: 6.0\nConnections: 1\nCore Topic: Hydrology"}, {"color": "lightgrey", "font": {"color": "white"}, "id": "Klimatologie III", "label": "Klimatologie III", "shape": "dot", "size": 21.0, "title": "Klimatologie III\nECTS: 3.0\nConnections: 1\nCore Topic: Hydrology"}, {"color": "lightgrey", "font": {"color": "white"}, "id": "Bachelorarbeit: Wasserretention von Schnee - Die Erkenntnisse eines Feldversuchs", "label": "Bachelorarbeit: Wasserretention von Schnee - Die Erkenntnisse eines Feldversuchs", "shape": "dot", "size": 35.0, "title": "Bachelorarbeit: Wasserretention von Schnee - Die Erkenntnisse eines Feldversuchs\nECTS: 10.0\nConnections: 3\nCore Topic: Methods"}, {"color": "lightgrey", "font": {"color": "white"}, "id": "Hydrological field measurements", "label": "Hydrological field measurements", "shape": "dot", "size": 27.0, "title": "Hydrological field measurements\nECTS: 6.0\nConnections: 1\nCore Topic: Hydrology"}, {"color": "lightgrey", "font": {"color": "white"}, "id": "Proseminar Bodenkunde", "label": "Proseminar Bodenkunde", "shape": "dot", "size": 25.0, "title": "Proseminar Bodenkunde\nECTS: 5.0\nConnections: 2\nCore Topic: Spatial Planning"}, {"color": "lightgrey", "font": {"color": "white"}, "id": "Allgemeine Bodenkunde", "label": "Allgemeine Bodenkunde", "shape": "dot", "size": 21.0, "title": "Allgemeine Bodenkunde\nECTS: 3.0\nConnections: 3\nCore Topic: Natural Hazards"}, {"color": "lightgrey", "font": {"color": "white"}, "id": "Geomorphologische Feldaufnahmen", "label": "Geomorphologische Feldaufnahmen", "shape": "dot", "size": 21.0, "title": "Geomorphologische Feldaufnahmen\nECTS: 3.0\nConnections: 2\nCore Topic: Natural Hazards"}, {"color": "lightgrey", "font": {"color": "white"}, "id": "Geoprocessing I-III", "label": "Geoprocessing I-III", "shape": "dot", "size": 35.0, "title": "Geoprocessing I-III\nECTS: 10.0\nConnections: 4\nCore Topic: Methods"}, {"color": "lightgrey", "font": {"color": "white"}, "id": "Field Measurement Techniques for Geomorphology", "label": "Field Measurement Techniques for Geomorphology", "shape": "dot", "size": 19.0, "title": "Field Measurement Techniques for Geomorphology\nECTS: 2.0\nConnections: 3\nCore Topic: Methods"}, {"color": "lightgrey", "font": {"color": "white"}, "id": "Remote Sensing for Environmental Management", "label": "Remote Sensing for Environmental Management", "shape": "dot", "size": 21.0, "title": "Remote Sensing for Environmental Management\nECTS: 3.0\nConnections: 3\nCore Topic: Methods"}, {"color": "lightgrey", "font": {"color": "white"}, "id": "Geosensorik der Umwelt", "label": "Geosensorik der Umwelt", "shape": "dot", "size": 23.0, "title": "Geosensorik der Umwelt\nECTS: 4.0\nConnections: 3\nCore Topic: Methods"}, {"color": "lightgrey", "font": {"color": "white"}, "id": "Masterarbeit: Abflussmodellierung eines vergletscherten Einzugsgebietes", "label": "Masterarbeit: Abflussmodellierung eines vergletscherten Einzugsgebietes", "shape": "dot", "size": 75.0, "title": "Masterarbeit: Abflussmodellierung eines vergletscherten Einzugsgebietes\nECTS: 30.0\nConnections: 3\nCore Topic: Methods"}, {"color": "lightgrey", "font": {"color": "white"}, "id": "Data science and network theory", "label": "Data science and network theory", "shape": "dot", "size": 19.0, "title": "Data science and network theory\nECTS: 2.0\nConnections: 2\nCore Topic: Methods"}, {"color": "lightgrey", "font": {"color": "white"}, "id": "Landschafts\u00f6kologie", "label": "Landschafts\u00f6kologie", "shape": "dot", "size": 21.0, "title": "Landschafts\u00f6kologie\nECTS: 3.0\nConnections: 2\nCore Topic: Natural Hazards"}, {"color": "#e74c3c", "font": {"color": "white"}, "id": "Spatial Planning", "label": "Spatial Planning", "shape": "dot", "size": 55.94230769230769, "title": "Spatial Planning\nTotal ECTS: 29.0\nConnections: 6"}, {"color": "lightgrey", "font": {"color": "white"}, "id": "Probleme der Raumentwicklung: Beitr\u00e4ge der Political Ecology", "label": "Probleme der Raumentwicklung: Beitr\u00e4ge der Political Ecology", "shape": "dot", "size": 21.0, "title": "Probleme der Raumentwicklung: Beitr\u00e4ge der Political Ecology\nECTS: 3.0\nConnections: 1\nCore Topic: Spatial Planning"}, {"color": "lightgrey", "font": {"color": "white"}, "id": "Forum Nachhaltigkeit - W\u00e4lder als sozial-\u00f6kologische Systeme", "label": "Forum Nachhaltigkeit - W\u00e4lder als sozial-\u00f6kologische Systeme", "shape": "dot", "size": 19.0, "title": "Forum Nachhaltigkeit - W\u00e4lder als sozial-\u00f6kologische Systeme\nECTS: 2.0\nConnections: 1\nCore Topic: Spatial Planning"}, {"color": "lightgrey", "font": {"color": "white"}, "id": "Urban and Regional Development Theories", "label": "Urban and Regional Development Theories", "shape": "dot", "size": 27.0, "title": "Urban and Regional Development Theories\nECTS: 6.0\nConnections: 1\nCore Topic: Spatial Planning"}, {"color": "#2ecc71", "font": {"color": "white"}, "id": "Business Administration", "label": "Business Administration", "shape": "dot", "size": 62.58653846153846, "title": "Business Administration\nTotal ECTS: 34.5\nConnections: 8"}, {"color": "lightgrey", "font": {"color": "white"}, "id": "Einf\u00fchrung in das Management", "label": "Einf\u00fchrung in das Management", "shape": "dot", "size": 21.0, "title": "Einf\u00fchrung in das Management\nECTS: 3.0\nConnections: 1\nCore Topic: Business Administration"}, {"color": "lightgrey", "font": {"color": "white"}, "id": "Finanzielles Rechnungswesen I - Grundlagen", "label": "Finanzielles Rechnungswesen I - Grundlagen", "shape": "dot", "size": 21.0, "title": "Finanzielles Rechnungswesen I - Grundlagen\nECTS: 3.0\nConnections: 1\nCore Topic: Business Administration"}, {"color": "lightgrey", "font": {"color": "white"}, "id": "Personal und Organisation", "label": "Personal und Organisation", "shape": "dot", "size": 27.0, "title": "Personal und Organisation\nECTS: 6.0\nConnections: 1\nCore Topic: Business Administration"}, {"color": "lightgrey", "font": {"color": "white"}, "id": "Grundlagen des Markenmanagements", "label": "Grundlagen des Markenmanagements", "shape": "dot", "size": 24.0, "title": "Grundlagen des Markenmanagements\nECTS: 4.5\nConnections: 1\nCore Topic: Business Administration"}, {"color": "lightgrey", "font": {"color": "white"}, "id": "Erfolgreich vernetzt f\u00fchren - Neue Medien in der Personalf\u00fchrung (E-Leadership)", "label": "Erfolgreich vernetzt f\u00fchren - Neue Medien in der Personalf\u00fchrung (E-Leadership)", "shape": "dot", "size": 24.0, "title": "Erfolgreich vernetzt f\u00fchren - Neue Medien in der Personalf\u00fchrung (E-Leadership)\nECTS: 4.5\nConnections: 1\nCore Topic: Business Administration"}, {"color": "lightgrey", "font": {"color": "white"}, "id": "Personalmanagement", "label": "Personalmanagement", "shape": "dot", "size": 27.0, "title": "Personalmanagement\nECTS: 6.0\nConnections: 1\nCore Topic: Business Administration"}, {"color": "lightgrey", "font": {"color": "white"}, "id": "Management von Familienunternehmen", "label": "Management von Familienunternehmen", "shape": "dot", "size": 21.0, "title": "Management von Familienunternehmen\nECTS: 3.0\nConnections: 1\nCore Topic: Business Administration"}, {"color": "lightgrey", "font": {"color": "white"}, "id": "International Marketing", "label": "International Marketing", "shape": "dot", "size": 24.0, "title": "International Marketing\nECTS: 4.5\nConnections: 1\nCore Topic: Business Administration"}, {"color": "#f39c12", "font": {"color": "white"}, "id": "Natural Hazards", "label": "Natural Hazards", "shape": "dot", "size": 89.98076923076923, "title": "Natural Hazards\nTotal ECTS: 79.0\nConnections: 11"}, {"color": "#9b59b6", "font": {"color": "white"}, "id": "Methods", "label": "Methods", "shape": "dot", "size": 76.76923076923077, "title": "Methods\nTotal ECTS: 64.0\nConnections: 8"}, {"color": "lightgrey", "font": {"color": "white"}, "id": "Labormethoden", "label": "Labormethoden", "shape": "dot", "size": 21.0, "title": "Labormethoden\nECTS: 3.0\nConnections: 1\nCore Topic: Methods"}, {"color": "#34495e", "font": {"color": "white"}, "id": "Hydro Power", "label": "Hydro Power", "shape": "dot", "size": 50, "title": "Hydro Power"}]);
+                  edges = new vis.DataSet([{"from": "Hydrology", "to": "Hydrologie I+II"}, {"from": "Hydrology", "to": "Seminar Hydrologie"}, {"from": "Hydrology", "to": "Grundz\u00fcge Erdwissenschaften I+II"}, {"from": "Hydrology", "to": "Meteorologie I+II"}, {"from": "Hydrology", "to": "Klimatologie III"}, {"from": "Hydrology", "to": "Bachelorarbeit: Wasserretention von Schnee - Die Erkenntnisse eines Feldversuchs"}, {"from": "Hydrology", "to": "Hydrological field measurements"}, {"from": "Hydrology", "to": "Proseminar Bodenkunde"}, {"from": "Hydrology", "to": "Allgemeine Bodenkunde"}, {"from": "Hydrology", "to": "Geomorphologische Feldaufnahmen"}, {"from": "Hydrology", "to": "Geoprocessing I-III"}, {"from": "Hydrology", "to": "Field Measurement Techniques for Geomorphology"}, {"from": "Hydrology", "to": "Remote Sensing for Environmental Management"}, {"from": "Hydrology", "to": "Geosensorik der Umwelt"}, {"from": "Hydrology", "to": "Masterarbeit: Abflussmodellierung eines vergletscherten Einzugsgebietes"}, {"from": "Hydrology", "to": "Data science and network theory"}, {"from": "Hydrology", "to": "Landschafts\u00f6kologie"}, {"from": "Hydrology", "to": "Hydro Power"}, {"from": "Seminar Hydrologie", "to": "Natural Hazards"}, {"from": "Grundz\u00fcge Erdwissenschaften I+II", "to": "Natural Hazards"}, {"from": "Bachelorarbeit: Wasserretention von Schnee - Die Erkenntnisse eines Feldversuchs", "to": "Natural Hazards"}, {"from": "Bachelorarbeit: Wasserretention von Schnee - Die Erkenntnisse eines Feldversuchs", "to": "Methods"}, {"from": "Proseminar Bodenkunde", "to": "Spatial Planning"}, {"from": "Allgemeine Bodenkunde", "to": "Spatial Planning"}, {"from": "Allgemeine Bodenkunde", "to": "Natural Hazards"}, {"from": "Geomorphologische Feldaufnahmen", "to": "Natural Hazards"}, {"from": "Geoprocessing I-III", "to": "Spatial Planning"}, {"from": "Geoprocessing I-III", "to": "Natural Hazards"}, {"from": "Geoprocessing I-III", "to": "Methods"}, {"from": "Field Measurement Techniques for Geomorphology", "to": "Natural Hazards"}, {"from": "Field Measurement Techniques for Geomorphology", "to": "Methods"}, {"from": "Remote Sensing for Environmental Management", "to": "Natural Hazards"}, {"from": "Remote Sensing for Environmental Management", "to": "Methods"}, {"from": "Geosensorik der Umwelt", "to": "Natural Hazards"}, {"from": "Geosensorik der Umwelt", "to": "Methods"}, {"from": "Masterarbeit: Abflussmodellierung eines vergletscherten Einzugsgebietes", "to": "Natural Hazards"}, {"from": "Masterarbeit: Abflussmodellierung eines vergletscherten Einzugsgebietes", "to": "Methods"}, {"from": "Data science and network theory", "to": "Methods"}, {"from": "Landschafts\u00f6kologie", "to": "Natural Hazards"}, {"from": "Spatial Planning", "to": "Probleme der Raumentwicklung: Beitr\u00e4ge der Political Ecology"}, {"from": "Spatial Planning", "to": "Forum Nachhaltigkeit - W\u00e4lder als sozial-\u00f6kologische Systeme"}, {"from": "Spatial Planning", "to": "Urban and Regional Development Theories"}, {"from": "Spatial Planning", "to": "Hydro Power"}, {"from": "Business Administration", "to": "Einf\u00fchrung in das Management"}, {"from": "Business Administration", "to": "Finanzielles Rechnungswesen I - Grundlagen"}, {"from": "Business Administration", "to": "Personal und Organisation"}, {"from": "Business Administration", "to": "Grundlagen des Markenmanagements"}, {"from": "Business Administration", "to": "Erfolgreich vernetzt f\u00fchren - Neue Medien in der Personalf\u00fchrung (E-Leadership)"}, {"from": "Business Administration", "to": "Personalmanagement"}, {"from": "Business Administration", "to": "Management von Familienunternehmen"}, {"from": "Business Administration", "to": "International Marketing"}, {"from": "Business Administration", "to": "Hydro Power"}, {"from": "Natural Hazards", "to": "Hydro Power"}, {"from": "Methods", "to": "Labormethoden"}, {"from": "Methods", "to": "Hydro Power"}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {"nodes": {"font": {"size": 14, "face": "Helvetica"}}, "edges": {"color": {"inherit": true}, "smooth": false}, "physics": {"barnesHut": {"gravitationalConstant": -8000, "centralGravity": 0.05, "springLength": 400, "springConstant": 0.005, "damping": 0.09}, "maxVelocity": 50, "minVelocity": 0.1, "timestep": 0.5}};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>
